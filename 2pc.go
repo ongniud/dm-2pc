@@ -227,6 +227,7 @@ func (c *Coordinator) Transfer(ctx context.Context, req TransferRequest) error {
 		return nil
 	}
 
+	// Phase 3: Verify
 	log.Printf("Transaction verification phase started, XID: %s\n", req.Xid)
 	for i := 0; i < len(pendingParticipants); i++ {
 		idx := pendingParticipants[i]
@@ -244,7 +245,7 @@ func (c *Coordinator) Transfer(ctx context.Context, req TransferRequest) error {
 		}
 	}
 
-	// Rollback if any participant failed
+	// Phase 4: Rollback
 	if len(failedParticipants) > 0 {
 		log.Printf("Transaction rollback phase started, XID: %s\n", req.Xid)
 		var rollbackErrors []error
